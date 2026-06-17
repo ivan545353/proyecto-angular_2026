@@ -1,10 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../../core/auth/auth.service';
 
-/**
- * Pantalla de inicio. Por ahora una bienvenida simple; más adelante
- * se puede convertir en un dashboard con métricas (home/stats).
- */
+
 @Component({
   selector: 'app-home',
   standalone: true,
