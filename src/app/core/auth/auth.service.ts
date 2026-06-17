@@ -34,7 +34,7 @@ export class AuthService {
    * son las que espera tu LoginDto.
    */
   login(cuenta: string, clave: string): Observable<string> {
-    const body = { userName: cuenta, password: clave };
+    const body = { cuenta, clave };
     return this.http
       .post<ApiResponse<{ token: string }>>(`${API_URL}authentication/login`, body)
       .pipe(

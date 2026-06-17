@@ -2,7 +2,7 @@ import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
-import { AuthService } from './Auth.service';
+import { AuthService } from './auth.service';
 
 /**
  * Se ejecuta en CADA petición HTTP. Si hay token, lo agrega como

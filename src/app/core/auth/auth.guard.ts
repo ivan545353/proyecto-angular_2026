@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from './Auth.service';
+import { AuthService } from './auth.service';
 
 /**
  * Bloquea el acceso a una ruta si el usuario no está logueado
