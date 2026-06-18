@@ -1,0 +1,97 @@
+@if (error()) {
+  <div class="alert alert-danger" role="alert">{{ error() }}</div>
+}
+
+@if (venta(); as v) {
+  <section class="mb-4 d-flex justify-content-between align-items-start flex-wrap gap-2">
+    <div>
+      <h1 class="h3 text-black mb-1">Venta N° {{ v.numero }}</h1>
+      <span class="badge" [class]="badgeClass()">{{ v.estado }}</span>
+    </div>
+    <a routerLink="/sale" class="btn btn-outline-secondary">Volver al listado</a>
+  </section>
+
+  <!-- Datos de cabecera -->
+  <div class="card card-body mb-4">
+    <div class="row g-3">
+      <div class="col-md-4"><span class="text-muted small d-block">Fecha</span>{{ v.fecha | date:'dd/MM/yyyy HH:mm' }}</div>
+      <div class="col-md-4"><span class="text-muted small d-block">Cliente</span>{{ v.cliente || '—' }}</div>
+      <div class="col-md-4"><span class="text-muted small d-block">Vendedor</span>{{ v.vendedor }}</div>
+      @if (v.observaciones) {
+        <div class="col-12"><span class="text-muted small d-block">Observaciones</span>{{ v.observaciones }}</div>
+      }
+    </div>
+  </div>
+
+  <!-- Detalle de líneas -->
+  <div class="card card-body mb-4">
+    <h5 class="mb-3">Productos</h5>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th>Producto</th>
+            <th class="text-end">Cantidad</th>
+            <th class="text-end">Precio unit.</th>
+            <th class="text-end">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (d of v.detalles; track d.productoId) {
+            <tr>
+              <td>{{ d.producto }}</td>
+              <td class="text-end">{{ d.cantidad }}</td>
+              <td class="text-end">$ {{ d.precioUnit | number:'1.2-2' }}</td>
+              <td class="text-end">$ {{ d.subtotal | number:'1.2-2' }}</td>
+            </tr>
+          }
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" class="text-end text-muted">Subtotal</td>
+            <td class="text-end">$ {{ v.subtotal | number:'1.2-2' }}</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="text-end text-muted">Descuento</td>
+            <td class="text-end">$ {{ v.descuento | number:'1.2-2' }}</td>
+          </tr>
+          <tr class="fs-5">
+            <td colspan="3" class="text-end">Total</td>
+            <td class="text-end"><strong>$ {{ v.total | number:'1.2-2' }}</strong></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- Acciones de estado -->
+  <div class="d-flex gap-2 flex-wrap">
+    @if (puedeConfirmar()) {
+      <button class="btn btn-info" [disabled]="procesando()"
+              (click)="cambiarEstado('confirmada', '¿Confirmar la venta? Se descontará el stock.')">
+        <i class="bi bi-check2-circle"></i> Confirmar venta
+      </button>
+    }
+    @if (puedeCobrar()) {
+      <button class="btn btn-success" [disabled]="procesando()"
+              (click)="cambiarEstado('cobrada', '¿Registrar el cobro de esta venta?')">
+        <i class="bi bi-cash-coin"></i> Registrar cobro
+      </button>
+    }
+    @if (puedeAnular()) {
+      <button class="btn btn-outline-dark" [disabled]="procesando()"
+              (click)="cambiarEstado('anulada', '¿Anular esta venta? Si tenía stock descontado, se repondrá.')">
+        <i class="bi bi-slash-circle"></i> Anular
+      </button>
+    }
+    @if (puedeEliminar()) {
+      <button class="btn btn-danger" [disabled]="procesando()" (click)="eliminar()">
+        <i class="bi bi-trash"></i> Eliminar
+      </button>
+    }
+  </div>
+} @else if (!error()) {
+  <div class="text-center text-muted py-4">
+    <div class="spinner-border" role="status"><span class="visually-hidden">Cargando…</span></div>
+  </div>
+}
