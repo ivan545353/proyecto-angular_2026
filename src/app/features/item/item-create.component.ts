@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { ItemService } from './item.service';
+import { ItemService } from '../../core/item/item.service';
 import { CategoryService } from '../../core/category/category.service';
 import { Category } from '../../core/models/category.model';
 

@@ -1,4 +1,3 @@
-// Coincide con tu tabla productos + tu ItemDto.
 // 'categoria' (nombre) viene del JOIN y es solo lectura; lo que se
 // envía/guarda es 'categoriaId' (el número de la FK).
 export interface Item {

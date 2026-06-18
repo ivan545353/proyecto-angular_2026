@@ -1,7 +1,7 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
-import { ItemService } from './item.service';
+import { ItemService } from '../../core/item/item.service';
 import { Item } from '../../core/models/item.model';
 
 @Component({
