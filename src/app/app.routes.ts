@@ -9,7 +9,9 @@ import { CategoryEditComponent } from './features/category/category-edit.compone
 import { ItemIndexComponent } from './features/item/item-index.component';
 import { ItemCreateComponent } from './features/item/item-create.component';
 import { ItemEditComponent } from './features/item/item-edit.component';
-
+import { UserIndexComponent } from './features/user/user-index.component';
+import { UserCreateComponent } from './features/user/user-create.component';
+import { UserEditComponent } from './features/user/user-edit.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -29,6 +31,9 @@ export const routes: Routes = [
             { path: 'item/create', component: ItemCreateComponent },
             { path: 'item/edit/:id', component: ItemEditComponent },
 
+            { path: 'user', component: UserIndexComponent },
+            { path: 'user/create', component: UserCreateComponent },
+            { path: 'user/edit/:id', component: UserEditComponent },
 
             // Próxima capa: sale (ventas), mi-cuenta
             { path: '', redirectTo: 'home', pathMatch: 'full' }
