@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { CategoryService } from './category.service';
+import { CategoryService } from '../../core/category/category.service';
 
 @Component({
     selector: 'app-category-create',

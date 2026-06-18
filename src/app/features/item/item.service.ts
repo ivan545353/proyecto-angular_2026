@@ -3,34 +3,34 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { API_URL } from '../../core/api/api.constants';
 import { ApiResponse } from '../../core/models/api-response.model';
-import { Category } from '../../core/models/category.model';
+import { Item, ItemPayload } from '../../core/models/item.model';
 
 @Injectable({ providedIn: 'root' })
-export class CategoryService {
+export class ItemService {
     private http = inject(HttpClient);
-    private base = `${API_URL}category`;
+    private base = `${API_URL}item`;
 
-    list(): Observable<Category[]> {
+    list(): Observable<Item[]> {
         return this.http
-            .get<ApiResponse<Category[]>>(`${this.base}/list`)
+            .get<ApiResponse<Item[]>>(`${this.base}/list`)
             .pipe(map(res => res.result ?? []));
     }
 
-    load(id: number): Observable<Category> {
+    load(id: number): Observable<Item> {
         return this.http
-            .get<ApiResponse<Category>>(`${this.base}/load/${id}`)
+            .get<ApiResponse<Item>>(`${this.base}/load/${id}`)
             .pipe(map(res => res.result));
     }
 
-    save(nombre: string): Observable<string> {
+    save(item: ItemPayload): Observable<string> {
         return this.http
-            .post<ApiResponse<unknown>>(`${this.base}/save`, { nombre })
+            .post<ApiResponse<unknown>>(`${this.base}/save`, item)
             .pipe(map(res => res.message));
     }
 
-    update(category: Category): Observable<string> {
+    update(item: Item): Observable<string> {
         return this.http
-            .put<ApiResponse<unknown>>(`${this.base}/update`, category)
+            .put<ApiResponse<unknown>>(`${this.base}/update`, item)
             .pipe(map(res => res.message));
     }
 

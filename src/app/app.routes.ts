@@ -6,6 +6,10 @@ import { HomeComponent } from './features/home/home.component';
 import { CategoryIndexComponent } from './features/category/category-index.component';
 import { CategoryCreateComponent } from './features/category/category-create.component';
 import { CategoryEditComponent } from './features/category/category-edit.component';
+import { ItemIndexComponent } from './features/item/item-index.component';
+import { ItemCreateComponent } from './features/item/item-create.component';
+import { ItemEditComponent } from './features/item/item-edit.component';
+
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -17,12 +21,16 @@ export const routes: Routes = [
         children: [
             { path: 'home', component: HomeComponent },
 
-            // Módulo Categorías (el molde)
             { path: 'category', component: CategoryIndexComponent },
             { path: 'category/create', component: CategoryCreateComponent },
             { path: 'category/edit/:id', component: CategoryEditComponent },
 
-            // Próximas capas: item, user, sale, mi-cuenta
+            { path: 'item', component: ItemIndexComponent },
+            { path: 'item/create', component: ItemCreateComponent },
+            { path: 'item/edit/:id', component: ItemEditComponent },
+
+
+            // Próxima capa: sale (ventas), mi-cuenta
             { path: '', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

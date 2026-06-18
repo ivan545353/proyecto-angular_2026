@@ -1,6 +1,6 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CategoryService } from './category.service';
+import { CategoryService } from '../../core/category/category.service';
 import { Category } from '../../core/models/category.model';
 
 @Component({
