@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { UserService } from './user.service';
+import { UserService } from '../../core/user/user.service';
 import { Profile, User } from '../../core/models/user.model';
 import { clavesIguales } from './claves-iguales.validator';
 

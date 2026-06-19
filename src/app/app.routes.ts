@@ -15,6 +15,8 @@ import { UserEditComponent } from './features/user/user-edit.component';
 import { SaleIndexComponent } from './features/sale/sale-index.component';
 import { SaleCreateComponent } from './features/sale/sale-create.component';
 import { SaleDetailComponent } from './features/sale/sale-detail.component';
+import { SaleEditComponent } from './features/sale/sale-edit.component';
+import { AccountComponent } from './features/account/account.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -40,7 +42,10 @@ export const routes: Routes = [
 
             { path: 'sale', component: SaleIndexComponent },
             { path: 'sale/create', component: SaleCreateComponent },
+            { path: 'sale/edit/:id', component: SaleEditComponent },
             { path: 'sale/detail/:id', component: SaleDetailComponent },
+
+            { path: 'mi-cuenta', component: AccountComponent },
 
             { path: '', redirectTo: 'home', pathMatch: 'full' }
         ]

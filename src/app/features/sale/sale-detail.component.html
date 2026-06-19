@@ -136,6 +136,11 @@
         <i class="bi bi-check2-circle"></i> Confirmar venta
       </button>
     }
+    @if (puedeEliminar()) {
+      <a [routerLink]="['/sale/edit', venta()!.id]" class="btn btn-outline-primary">
+        <i class="bi bi-pencil"></i> Editar
+      </a>
+    }
     @if (puedeAnular()) {
       <button class="btn btn-outline-dark" [disabled]="procesando()"
               (click)="cambiarEstado('anulada', '¿Anular esta venta? Si tenía stock descontado, se repondrá.')">

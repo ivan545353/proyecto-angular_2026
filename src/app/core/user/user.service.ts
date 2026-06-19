@@ -41,6 +41,19 @@ export class UserService {
             .pipe(map(res => res.message));
     }
 
+    // Datos del usuario logueado (lee el id del token en el backend)
+    getCurrent(): Observable<User> {
+        return this.http
+            .get<ApiResponse<User>>(`${this.base}/getCurrent`)
+            .pipe(map(res => res.result));
+    }
+
+    changePassword(payload: { currentPassword: string; newPassword: string; confirmPassword: string }): Observable<string> {
+        return this.http
+            .put<ApiResponse<unknown>>(`${this.base}/changePassword`, payload)
+            .pipe(map(res => res.message));
+    }
+
     delete(id: number): Observable<string> {
         return this.http
             .delete<ApiResponse<unknown>>(`${this.base}/delete/${id}`)

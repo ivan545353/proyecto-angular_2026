@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { API_URL } from '../../core/api/api.constants';
 import { ApiResponse } from '../../core/models/api-response.model';
-import { PagoPayload, Sale, SaleEstado, SalePayload } from '../../core/models/sale.model';
+import { Sale, SaleEstado, SalePayload, PagoPayload } from '../../core/models/sale.model';
 
 @Injectable({ providedIn: 'root' })
 export class SaleService {
@@ -29,6 +29,13 @@ export class SaleService {
         return this.http
             .post<ApiResponse<{ id: number }>>(`${this.base}/save`, payload)
             .pipe(map(res => res.result.id));
+    }
+
+    // Edita un presupuesto (el backend solo lo permite en estado presupuesto)
+    update(id: number, payload: SalePayload): Observable<string> {
+        return this.http
+            .put<ApiResponse<unknown>>(`${this.base}/update`, { id, ...payload })
+            .pipe(map(res => res.message));
     }
 
     updateEstado(id: number, estado: SaleEstado): Observable<string> {
