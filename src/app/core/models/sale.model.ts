@@ -8,6 +8,14 @@ export interface SaleDetail {
 
 export type SaleEstado = 'presupuesto' | 'confirmada' | 'cobrada' | 'anulada';
 
+export interface Pago {
+    id: number;
+    metodo: string;
+    monto: number;
+    referencia: string | null;
+    fecha: string;
+}
+
 export interface Sale {
     id: number;
     numero: number;
@@ -17,14 +25,16 @@ export interface Sale {
     estado: SaleEstado;
     subtotal: number;
     descuento: number;
+    descuentoPorcentaje: number;
     total: number;
     observaciones: string | null;
     vendedor?: string;
     detalles?: SaleDetail[];
+    pagos?: Pago[];
+    pagado?: number;
+    saldo?: number;
 }
 
-// Lo que el frontend envía: solo producto + cantidad por línea.
-// El backend resuelve precios y totales (fuente de verdad).
 export interface SaleLinePayload {
     productoId: number;
     cantidad: number;
@@ -33,6 +43,13 @@ export interface SaleLinePayload {
 export interface SalePayload {
     cliente: string;
     observaciones: string;
-    descuento: number;
+    descuentoPorcentaje: number;
     detalles: SaleLinePayload[];
+    confirmar?: boolean;
+}
+
+export interface PagoPayload {
+    metodo: string;
+    monto: number;
+    referencia?: string;
 }

@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { API_URL } from '../../core/api/api.constants';
 import { ApiResponse } from '../../core/models/api-response.model';
-import { Sale, SaleEstado, SalePayload } from '../../core/models/sale.model';
+import { PagoPayload, Sale, SaleEstado, SalePayload } from '../../core/models/sale.model';
 
 @Injectable({ providedIn: 'root' })
 export class SaleService {
@@ -24,6 +24,7 @@ export class SaleService {
             .pipe(map(res => res.result));
     }
 
+    // confirmar=true => venta directa (nace confirmada). false => presupuesto.
     save(payload: SalePayload): Observable<number> {
         return this.http
             .post<ApiResponse<{ id: number }>>(`${this.base}/save`, payload)
@@ -33,6 +34,13 @@ export class SaleService {
     updateEstado(id: number, estado: SaleEstado): Observable<string> {
         return this.http
             .put<ApiResponse<unknown>>(`${this.base}/updateEstado/${id}`, { estado })
+            .pipe(map(res => res.message));
+    }
+
+    // Registra un pago (total o parcial)
+    cobrar(id: number, pago: PagoPayload): Observable<string> {
+        return this.http
+            .put<ApiResponse<unknown>>(`${this.base}/cobrar/${id}`, pago)
             .pipe(map(res => res.message));
     }
 

@@ -11,7 +11,6 @@
     <a routerLink="/sale" class="btn btn-outline-secondary">Volver al listado</a>
   </section>
 
-  <!-- Datos de cabecera -->
   <div class="card card-body mb-4">
     <div class="row g-3">
       <div class="col-md-4"><span class="text-muted small d-block">Fecha</span>{{ v.fecha | date:'dd/MM/yyyy HH:mm' }}</div>
@@ -23,7 +22,6 @@
     </div>
   </div>
 
-  <!-- Detalle de líneas -->
   <div class="card card-body mb-4">
     <h5 class="mb-3">Productos</h5>
     <div class="table-responsive">
@@ -52,8 +50,8 @@
             <td class="text-end">$ {{ v.subtotal | number:'1.2-2' }}</td>
           </tr>
           <tr>
-            <td colspan="3" class="text-end text-muted">Descuento</td>
-            <td class="text-end">$ {{ v.descuento | number:'1.2-2' }}</td>
+            <td colspan="3" class="text-end text-muted">Descuento ({{ v.descuentoPorcentaje | number:'1.0-2' }}%)</td>
+            <td class="text-end">- $ {{ v.descuento | number:'1.2-2' }}</td>
           </tr>
           <tr class="fs-5">
             <td colspan="3" class="text-end">Total</td>
@@ -64,18 +62,78 @@
     </div>
   </div>
 
+  <!-- Pagos -->
+  @if (v.estado !== 'presupuesto') {
+    <div class="card card-body mb-4">
+      <h5 class="mb-3">Pagos</h5>
+
+      @if (v.pagos && v.pagos.length > 0) {
+        <div class="table-responsive mb-3">
+          <table class="table table-sm">
+            <thead>
+              <tr><th>Fecha</th><th>Método</th><th class="text-end">Monto</th><th>Referencia</th></tr>
+            </thead>
+            <tbody>
+              @for (p of v.pagos; track p.id) {
+                <tr>
+                  <td>{{ p.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+                  <td class="text-capitalize">{{ p.metodo }}</td>
+                  <td class="text-end">$ {{ p.monto | number:'1.2-2' }}</td>
+                  <td>{{ p.referencia || '—' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <p class="text-muted">Todavía no se registraron pagos.</p>
+      }
+
+      <div class="d-flex justify-content-end gap-4">
+        <div><span class="text-muted small d-block text-end">Pagado</span>$ {{ v.pagado | number:'1.2-2' }}</div>
+        <div><span class="text-muted small d-block text-end">Saldo</span><strong>$ {{ v.saldo | number:'1.2-2' }}</strong></div>
+      </div>
+
+      <!-- Form de cobro -->
+      @if (puedeCobrar()) {
+        <hr>
+        <h6 class="mb-3">Registrar pago</h6>
+        <form [formGroup]="pagoForm" (ngSubmit)="registrarPago()" class="row g-2 align-items-end">
+          <div class="col-md-3">
+            <label class="form-label small">Método</label>
+            <select class="form-select" formControlName="metodo">
+              @for (m of metodosPago; track m.valor) {
+                <option [value]="m.valor">{{ m.etiqueta }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small">Monto</label>
+            <input type="number" class="form-control" formControlName="monto"
+                   min="0.01" [max]="v.saldo ?? null" step="any"
+                   [class.is-invalid]="pagoForm.controls.monto.touched && pagoForm.controls.monto.invalid">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small">Referencia (opcional)</label>
+            <input type="text" class="form-control" formControlName="referencia"
+                   placeholder="N° operación / comprobante">
+          </div>
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-success w-100" [disabled]="procesando()">
+              <i class="bi bi-cash"></i> Cobrar
+            </button>
+          </div>
+        </form>
+      }
+    </div>
+  }
+
   <!-- Acciones de estado -->
   <div class="d-flex gap-2 flex-wrap">
     @if (puedeConfirmar()) {
       <button class="btn btn-info" [disabled]="procesando()"
               (click)="cambiarEstado('confirmada', '¿Confirmar la venta? Se descontará el stock.')">
         <i class="bi bi-check2-circle"></i> Confirmar venta
-      </button>
-    }
-    @if (puedeCobrar()) {
-      <button class="btn btn-success" [disabled]="procesando()"
-              (click)="cambiarEstado('cobrada', '¿Registrar el cobro de esta venta?')">
-        <i class="bi bi-cash-coin"></i> Registrar cobro
       </button>
     }
     @if (puedeAnular()) {
