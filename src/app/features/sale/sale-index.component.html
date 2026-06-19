@@ -20,6 +20,9 @@
       <option value="anulada">Anulada</option>
     </select>
   </div>
+  <button type="button" class="btn btn-outline-danger" (click)="exportarPdf()">
+    <i class="bi bi-file-earmark-pdf"></i> Exportar PDF
+  </button>
 </section>
 
 @if (cargando()) {

@@ -2,6 +2,7 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CategoryService } from '../../core/category/category.service';
 import { Category } from '../../core/models/category.model';
+import { PdfService } from '../../core/pdf/pdf.service';
 
 @Component({
     selector: 'app-category-index',
@@ -11,6 +12,7 @@ import { Category } from '../../core/models/category.model';
 })
 export class CategoryIndexComponent implements OnInit {
     private service = inject(CategoryService);
+    private pdf = inject(PdfService);
 
     categorias = signal<Category[]>([]);
     filtro = signal('');
@@ -38,6 +40,11 @@ export class CategoryIndexComponent implements OnInit {
                 this.cargando.set(false);
             }
         });
+    }
+
+    exportarPdf(): void {
+        const filas = this.categoriasFiltradas().map(c => [c.nombre]);
+        this.pdf.exportarListado('Listado de categorías', ['Nombre'], filas, 'categorias');
     }
 
     eliminar(cat: Category): void {

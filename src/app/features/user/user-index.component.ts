@@ -2,6 +2,7 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { UserService } from '../../core/user/user.service';
 import { User } from '../../core/models/user.model';
+import { PdfService } from '../../core/pdf/pdf.service';
 
 @Component({
     selector: 'app-user-index',
@@ -11,6 +12,7 @@ import { User } from '../../core/models/user.model';
 })
 export class UserIndexComponent implements OnInit {
     private service = inject(UserService);
+    private pdf = inject(PdfService);
 
     usuarios = signal<User[]>([]);
     cargando = signal(false);
@@ -45,6 +47,15 @@ export class UserIndexComponent implements OnInit {
                 this.cargando.set(false);
             }
         });
+    }
+
+    exportarPdf(): void {
+        const filas = this.usuariosFiltrados().map(u => [
+            `${u.apellido}, ${u.nombres}`, u.cuenta, u.perfil ?? '',
+            u.correo, u.estado === 1 ? 'Activo' : 'Inactivo'
+        ]);
+        this.pdf.exportarListado('Listado de usuarios',
+            ['Usuario', 'Cuenta', 'Perfil', 'Correo', 'Estado'], filas, 'usuarios');
     }
 
     eliminar(u: User): void {

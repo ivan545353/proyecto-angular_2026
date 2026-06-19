@@ -4,6 +4,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { SaleService } from '../../core/sale/sale.service';
 import { Sale } from '../../core/models/sale.model';
 import { AuthService } from '../../core/auth/auth.service';
+import { PdfService } from '../../core/pdf/pdf.service';
 
 @Component({
     selector: 'app-sale-index',
@@ -14,6 +15,7 @@ import { AuthService } from '../../core/auth/auth.service';
 export class SaleIndexComponent implements OnInit {
     private service = inject(SaleService);
     private auth = inject(AuthService);
+    private pdf = inject(PdfService);
 
     ventas = signal<Sale[]>([]);
     cargando = signal(false);
@@ -52,5 +54,18 @@ export class SaleIndexComponent implements OnInit {
             case 'anulada': return 'text-bg-secondary';
             default: return 'text-bg-light';
         }
+    }
+
+    exportarPdf(): void {
+        const filas = this.ventasFiltradas().map(v => [
+            v.numero,
+            new Date(v.fecha).toLocaleDateString('es-AR'),
+            v.cliente || '—',
+            v.vendedor ?? '',
+            v.estado,
+            '$ ' + Number(v.total).toFixed(2)
+        ]);
+        this.pdf.exportarListado('Listado de ventas',
+            ['N°', 'Fecha', 'Cliente', 'Vendedor', 'Estado', 'Total'], filas, 'ventas');
     }
 }

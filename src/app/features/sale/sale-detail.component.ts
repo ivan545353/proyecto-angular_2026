@@ -1,10 +1,11 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SaleService } from '../../core/sale/sale.service';
 import { Sale, SaleEstado } from '../../core/models/sale.model';
 import { AuthService } from '../../core/auth/auth.service';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { PdfService } from '../../core/pdf/pdf.service';
 
 @Component({
     selector: 'app-sale-detail',
@@ -18,6 +19,7 @@ export class SaleDetailComponent implements OnInit {
     private router = inject(Router);
     private route = inject(ActivatedRoute);
     private fb = inject(FormBuilder);
+    private pdf = inject(PdfService);
 
     private id = Number(this.route.snapshot.paramMap.get('id'));
 
@@ -82,6 +84,11 @@ export class SaleDetailComponent implements OnInit {
             },
             error: err => this.error.set(err?.error?.error ?? 'No se encontró la venta.')
         });
+    }
+
+    exportarPdf(): void {
+        const v = this.venta();
+        if (v) this.pdf.exportarVenta(v);
     }
 
     cambiarEstado(nuevo: SaleEstado, mensaje: string): void {

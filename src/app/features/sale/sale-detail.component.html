@@ -8,7 +8,12 @@
       <h1 class="h3 text-black mb-1">Venta N° {{ v.numero }}</h1>
       <span class="badge" [class]="badgeClass()">{{ v.estado }}</span>
     </div>
-    <a routerLink="/sale" class="btn btn-outline-secondary">Volver al listado</a>
+    <div class="d-flex gap-2">
+      <button type="button" class="btn btn-outline-danger" (click)="exportarPdf()">
+        <i class="bi bi-file-earmark-pdf"></i> Exportar PDF
+      </button>
+      <a routerLink="/sale" class="btn btn-outline-secondary">Volver al listado</a>
+    </div>
   </section>
 
   <div class="card card-body mb-4">

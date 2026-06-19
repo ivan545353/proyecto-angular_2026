@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import { ItemService } from '../../core/item/item.service';
 import { Item } from '../../core/models/item.model';
+import { PdfService } from '../../core/pdf/pdf.service';
 
 @Component({
     selector: 'app-item-index',
@@ -12,6 +13,7 @@ import { Item } from '../../core/models/item.model';
 })
 export class ItemIndexComponent implements OnInit {
     private service = inject(ItemService);
+    private pdf = inject(PdfService);
 
     items = signal<Item[]>([]);
     cargando = signal(false);
@@ -62,6 +64,15 @@ export class ItemIndexComponent implements OnInit {
         this.fCodigo.set('');
         this.fCategoria.set('');
         this.fStock.set('');
+    }
+
+    exportarPdf(): void {
+        const filas = this.itemsFiltrados().map(i => [
+            i.nombre, i.codigo, i.categoria ?? '',
+            '$ ' + Number(i.precio).toFixed(2), i.stock
+        ]);
+        this.pdf.exportarListado('Listado de productos',
+            ['Nombre', 'Código', 'Categoría', 'Precio', 'Stock'], filas, 'productos');
     }
 
     eliminar(item: Item): void {
